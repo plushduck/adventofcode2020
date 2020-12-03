@@ -4,7 +4,6 @@ def read_test_file(filename):
 
 
 def get_trees_for_slope(test, delta_x, delta_y):
-    test = read_test_file('./3/input.txt')
     pos_x = 0
     modulo = len(test[0])
     trees = 0
@@ -19,7 +18,6 @@ def get_trees_for_slope(test, delta_x, delta_y):
 
 
 
-# 176
 if __name__ == "__main__":
 
     test = read_test_file('./3/input.txt')
