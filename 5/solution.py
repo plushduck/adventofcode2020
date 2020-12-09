@@ -11,6 +11,14 @@ def get_seat(str_rep):
 
 if __name__ == "__main__":
     with open('./5/input.txt') as f:
+        # Part 1
         codes = f.read().splitlines()
         seats = [get_seat(code) for code in codes]
         print(max(seats))
+
+        # Part 2
+        seats.sort()
+        i = 0
+        while seats[i+1] == seats[i]+1:
+            i += 1
+        print(seats[i]+1)
