@@ -48,7 +48,7 @@ def parse_rules_file(filename):
             content_options = content_rules.split(", ")
             for option in content_options:
                 m = content_option_parser.match(option)
-                count = m.group('bag_count')
+                count = int(m.group('bag_count'))
                 contained_bag = m.group('bag_name')
                 init_bag_type(contained_bag)
                 assert contained_bag not in BAG_TYPE_DIR[containing_bag]['content_options']
@@ -67,7 +67,15 @@ def get_possible_containers(name):
     return possible_containers
 
 
+def get_contents_count(name):
+    assert name in BAG_TYPE_DIR
+    total = 0
+    for contained_bag, count in BAG_TYPE_DIR[name]['content_options'].items():
+        total += count * (1 + get_contents_count(contained_bag))
+    return total
+
 if __name__ == '__main__':
     parse_rules_file('./7/input.txt')
     possible_containers = get_possible_containers('shiny gold')
     print(len(possible_containers))
+    print(get_contents_count('shiny gold'))
