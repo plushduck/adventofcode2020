@@ -41,7 +41,10 @@ INSTR_PROCESSORS = {
 
 def run_program(instructions):
     visited = set()
-    while INSTR not in visited:
+    global INSTR, ACCUM
+    INSTR = ACCUM = 0
+    end = len(instructions)
+    while INSTR not in visited and INSTR != end:
         visited.add(INSTR)
         INSTR_PROCESSORS[instructions[INSTR][0]](instructions[INSTR][1])
     return ACCUM
@@ -49,7 +52,23 @@ def run_program(instructions):
 if __name__ == '__main__':
     with open('./8/input.txt') as f:
         lines = f.read().splitlines()
-    instructions = [(line[:3], int(line[4:])) for line in lines]
+    instructions = [[line[:3], int(line[4:])] for line in lines]
 
     # Part 1
     print(run_program(instructions))
+
+    def swap_nop_jmp(instructions, i):
+        if instructions[i][0] == 'jmp':
+            instructions[i][0] = 'nop'
+        elif instructions[i][0] == 'nop':
+            instructions[i][0] = 'jmp'
+
+    # Part 2
+    end_instr = len(instructions)
+    for i in range(len(instructions)):
+        swap_nop_jmp(instructions, i)
+        run_program(instructions)
+        swap_nop_jmp(instructions, i)
+        if INSTR == end_instr:
+            print(ACCUM)
+            break
