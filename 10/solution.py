@@ -1,4 +1,5 @@
 from collections import defaultdict
+import time
 
 # Assumes values sorted
 def brute_force_count_paths(values):
@@ -26,6 +27,7 @@ if __name__ == '__main__':
     print(delta_counts[1] * delta_counts[3])
 
     # Part 2
+    start = time.time()
     brute_start = 0
     paths = 1
     for i in range(1,len(values)):
@@ -34,3 +36,4 @@ if __name__ == '__main__':
             paths *= brute_force_count_paths(values[brute_start:i])
             brute_start = i
     print(paths)
+    print("--- %s seconds ---" % (time.time() - start))
