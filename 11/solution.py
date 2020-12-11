@@ -4,39 +4,23 @@ from itertools import product
 ADJ_OFFSETS = set(product(range(-1,2),repeat=2))
 ADJ_OFFSETS.remove((0,0))
 
+# Increment the adjacency counts of positions adjacent to (i,j)
 def inc_adj(adj_count, i, j):
     for ii,jj in ADJ_OFFSETS:
         if i+ii >= 0 and i+ii < len(adj_count) and j+jj >= 0 and j+jj < len(adj_count[0]):
             adj_count[i+ii][j+jj] += 1
 
-def inc_los(input, adj_count, i, j, i_offset, j_offset):
-    cur_i = i
-    cur_j = j
-    while True:
-        cur_i += i_offset
-        cur_j += j_offset
-        if cur_i < 0 or cur_i >= len(adj_count):
-            return
-        if cur_j < 0 or cur_j >= len(adj_count[0]):
-            return
-        if input[cur_i][cur_j] == '#':
-            adj_count[i][j] += 1
-            return
-        if input[cur_i][cur_j] == 'L':
-            return
-
-def inc_adj_los(input, adj_count, i, j):
-    for i_offset, j_offset in ADJ_OFFSETS:
-        inc_los(input, adj_count, i, j, i_offset, j_offset)
-
+# Print a readable map
 def print_map(input):
     for row in input:
         print(''.join(row))
 
+# Print adjacency or visibilty counts
 def print_counts(counts):
     for row in counts:
         print(','.join([str(s) for s in row]))
 
+# Print the count of occupied seats
 def print_occupied(input):
     count = 0
     for row in input:
@@ -45,7 +29,8 @@ def print_occupied(input):
                 count += 1
     print(count)
 
-# Returns True if seats flipped, False else
+# Apply one step of the adjacency update rules for Part 1.
+# Returns True if occupancy changed, False else
 def step_seats(input):
     adj_count = []
     for row in input:
@@ -114,13 +99,11 @@ def get_vis_count(input):
     return vis_count
 
 
-# Returns True if seats flipped, False else
+# Apply one step of the visibility update rules for Part 2.
+# Returns True if occupancy changed, False else
 def step_seats_los(input):
 
     adj_count = get_vis_count(input)
-    # print_map(input)
-    # print_counts(adj_count)
-    # print("")
     flipped = False
     for i,row in enumerate(input):
         for j, seat in enumerate(row):
